@@ -15,6 +15,10 @@ a {
   box-sizing: border-box;
 }
 
+hr {
+  border-top: 1px solid gray;
+}
+
 .print-cont {
   position: relative;
 }
