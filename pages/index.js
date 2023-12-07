@@ -16,17 +16,18 @@ export default function Home() {
   const [url, setUrl] = useState("");
   const [qrCodeSrc, setQrCodeSrc] = useState();
 
-  const printRef = useRef();
+  const printRef1 = useRef();
+  const printRef2 = useRef();
 
   const appendQRCode = () => {
     const fullUrl = `https://${url}`;
     setQrCodeSrc(
-      `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${fullUrl}`
+      `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${fullUrl}`
     );
   };
 
   return (
-    <Container>
+    <Container className="pb-5">
       <Head>
         <title>URL gift generator</title>
         <link rel="icon" href="/favicon.ico" />
@@ -59,14 +60,27 @@ export default function Home() {
       </Row>
       {qrCodeSrc && (
         <Container className="mt-5 d-flex flex-column align-items-center">
-          <div className="" ref={printRef}>
-            <img src={qrCodeSrc} />
+          <div className="print-cont" ref={printRef1}>
+            <img className="template-img" src="/images/1.jpg" />
+            <img className="qr-1" src={qrCodeSrc} />
           </div>
-          <div className="mt-5">
+          <div className="mt-3">
             <ReactToPrint
               bodyClass="print-body"
-              content={() => printRef.current}
-              trigger={() => <Button color="primary">Tisknout</Button>}
+              content={() => printRef1.current}
+              trigger={() => <Button color="primary">Tisk</Button>}
+            />
+          </div>
+          <hr />
+          <div className="print-cont" ref={printRef2}>
+            <img className="template-img" src="/images/2.jpg" />
+            <img className="qr-2" src={qrCodeSrc} />
+          </div>
+          <div className="mt-3">
+            <ReactToPrint
+              bodyClass="print-body"
+              content={() => printRef2.current}
+              trigger={() => <Button color="primary">Tisk</Button>}
             />
           </div>
         </Container>

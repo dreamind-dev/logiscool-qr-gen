@@ -15,6 +15,29 @@ a {
   box-sizing: border-box;
 }
 
+.print-cont {
+  position: relative;
+}
+
+.print-cont .template-img {
+  max-width: 700px;
+}
+
+.print-cont .qr-1 {
+  position: absolute;
+  top:105px;
+  left:95px;
+  /* mix-blend-mode: multiply; */
+}
+
+.print-cont .qr-2 {
+  position: absolute;
+  top:80px;
+  left:125px;
+  max-width: 100px;
+  mix-blend-mode: multiply;
+}
+
 .print-body {
   display: flex;
   flex-direction: column;
