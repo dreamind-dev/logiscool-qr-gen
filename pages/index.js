@@ -43,6 +43,7 @@ export default function Home() {
                 className="ms-2"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
+                maxLength={255}
               />
             </div>
           </FormGroup>
