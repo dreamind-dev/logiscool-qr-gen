@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
 import {
   Button,
@@ -16,21 +16,42 @@ export default function Home() {
   const [text1, setText1] = useState("");
   const [text2, setText2] = useState("");
   const [qrCodeSrc, setQrCodeSrc] = useState();
+  const [qrCodeSrc2, setQrCodeSrc2] = useState();
+  const [qrSvg, setQrSvg] = useState();
+  const [qrSvg2, setQrSvg2] = useState();
 
   const printRef1 = useRef();
   const printRef2 = useRef();
 
   const appendQRCode = () => {
-    const fullUrl = `https://${url}`;
+    const fullUrl = `${url}`;
     setQrCodeSrc(
-      `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${fullUrl}`
+      `https://api.qrserver.com/v1/create-qr-code/?size=110x110&color=cdd500&format=svg&data=${fullUrl}`
+    );
+    setQrCodeSrc2(
+      `https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=ffffff&format=svg&data=${fullUrl}`
     );
   };
+
+  useEffect(() => {
+    if (!qrCodeSrc) return;
+    (async () => {
+      const out = await fetch(qrCodeSrc).then((res) => res.text());
+      setQrSvg(out.replace(`<?xml version="1.0" standalone="no"?>`, ""));
+    })();
+  }, [qrCodeSrc]);
+  useEffect(() => {
+    if (!qrCodeSrc2) return;
+    (async () => {
+      const out = await fetch(qrCodeSrc2).then((res) => res.text());
+      setQrSvg2(out.replace(`<?xml version="1.0" standalone="no"?>`, ""));
+    })();
+  }, [qrCodeSrc2]);
 
   return (
     <Container className="pb-5">
       <Head>
-        <title>URL gift generator</title>
+        <title>Logiscool giftcard generator</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Row className="mt-5">
@@ -39,7 +60,6 @@ export default function Home() {
           <FormGroup>
             <Label for="urlInput">URL adresa:</Label>
             <div className="d-flex align-items-center mt-1">
-              <span>https://</span>
               <Input
                 id="urlInput"
                 className="ms-2"
@@ -83,13 +103,20 @@ export default function Home() {
         </Col>
         <Col sm={4}></Col>
       </Row>
-      {qrCodeSrc && (
+      {true && (
         <Container className="mt-5 d-flex flex-column align-items-center">
-          <div className="print-cont" ref={printRef1}>
+          <div className="print-cont template1" ref={printRef1}>
             <img className="template-img" src="/images/1.jpg" />
-            <img className="qr-1" src={qrCodeSrc} />
-            <span>{text1}</span>
-            <span>{text2}</span>
+            <div
+              className="qr"
+              dangerouslySetInnerHTML={{ __html: qrSvg }}
+            ></div>
+            <div className="text1-cont">
+              <span className="text1">
+                {text1}
+                <span className="text2">- {text2}</span>
+              </span>
+            </div>
           </div>
           <div className="mt-3">
             <ReactToPrint
@@ -99,11 +126,16 @@ export default function Home() {
             />
           </div>
           <hr />
-          <div className="print-cont" ref={printRef2}>
+          <div className="print-cont template2" ref={printRef2}>
             <img className="template-img" src="/images/2.jpg" />
-            <img className="qr-2" src={qrCodeSrc} />
-            <span>{text1}</span>
-            <span>{text2}</span>
+            <div
+              className="qr"
+              dangerouslySetInnerHTML={{ __html: qrSvg2 }}
+            ></div>
+            <div className="text2-cont">
+              <span className="text1">{text1}</span>
+            </div>
+            <span className="text2">Přeje: {text2}</span>
           </div>
           <div className="mt-3">
             <ReactToPrint
